@@ -84,6 +84,12 @@ namespace GC_API
             }
             if (a == "[]")
                 a = "";
+            if (a=="[&aHELP!&4]")
+            a="[HELP!]";
+            if (a == "[&1MOD&9]")
+                a = "[MOD]";
+            if (a == "[&rff66c016G&rfff7f7f7C&r99446666]")
+                a = "[GC]";
             return a;
         }
 
@@ -138,7 +144,7 @@ namespace GC_API
         static void output(string type, string name)
         {
             player user = new player(get(type, name));
-            Console.Write(user.prefix());
+            Console.Write("\n"+user.prefix());
             Console.WriteLine(user.name());
             if (user.status() == true)
             {
@@ -177,6 +183,7 @@ namespace GC_API
         {
             Console.ForegroundColor = ConsoleColor.White;
             string type = "/users";
+            Console.WriteLine("Введите ник пользователя:");
             string name = "/" + Console.ReadLine();
             output(type, name);
             Console.ReadKey();
