@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace GC_API
 {
+    //Написать про бейджи
     class player
     {
         static string result;
         public player(string a)
         {
-            result = a;
+            result = a.Replace(",", "");
         }
         static string name()
         {
