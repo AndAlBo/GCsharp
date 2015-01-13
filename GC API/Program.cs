@@ -15,7 +15,7 @@ namespace GC_API
         {
             result = a;
         }
-        public string name()
+        string name()
         {
             int i = result.IndexOf("username:");
             string a = "";
@@ -27,7 +27,7 @@ namespace GC_API
             return a;
         }
 
-        public bool status()
+        bool status()
         {
             int i = result.IndexOf("main:");
             string a = "";
@@ -42,7 +42,7 @@ namespace GC_API
                 return false;
         }
 
-        public string date()
+        string date()
         {
             int i = result.LastIndexOf("main:");
             string a = "";
@@ -56,7 +56,7 @@ namespace GC_API
             return time;
         }
 
-        public bool activ()
+        bool activ()
         {
             const int aktivTime = 1814400;
             int i = result.LastIndexOf("main:");
@@ -74,23 +74,33 @@ namespace GC_API
                 return false;
         }
 
-        public string prefix()
+        string prefix()
         {
-            int i = result.IndexOf("[");
+            int i = result.IndexOf("prefix");
             string a = "";
+            while (result[i + 8] != '\n')
+            {
+                a = a + result[i];
+                i++;
+            }
+            if(a!="null")
+            {
+            i = result.IndexOf("[");
+            a = "";
             while (result[i - 1] != ']')
             {
                 a = a + result[i];
                 i++;
             }
-            if (a == "[]")
-                a = "";
             if (a == "[&aHELP!&4]")
                 a = "[HELP!]";
             if (a == "[&1MOD&9]")
                 a = "[MOD]";
             if (a == "[&rff66c016G&rfff7f7f7C&r99446666]")
                 a = "[GC]";
+            }
+            else
+            a="";
             return a;
         }
 
@@ -122,6 +132,45 @@ namespace GC_API
             string time = Convert.ToString(pDate);
             return time;
         }
+        
+        static void player_output()
+        {
+            
+            Console.Write("\n" + user.prefix());
+            Console.WriteLine(user.name());
+            if (user.status() == true)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Игрок онлайн.");
+            }
+            else
+            {
+                Console.Write("Игрок заходил {0}", date());
+                if (activ() == true)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("  Игрок активен.");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("  Игрок неактивен.");
+                }
+                if (banned() == true)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("Игрок забанен.");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Игрок не забанен.");
+                }
+            }
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Игрок зарегистрирован {0}", reg_date());
+
+        }
     }
 
 
@@ -141,45 +190,7 @@ namespace GC_API
             ans = ans.Replace(",", "");
             return ans;
         }
-
-        static void output(string res)
-        {
-            player user = new player(res);
-            Console.Write("\n" + user.prefix());
-            Console.WriteLine(user.name());
-            if (user.status() == true)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Игрок онлайн.");
-            }
-            else
-            {
-                Console.Write("Игрок заходил {0}", user.date());
-                if (user.activ() == true)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("  Игрок активен.");
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("  Игрок неактивен.");
-                }
-                if (user.banned() == true)
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("Игрок забанен.");
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("Игрок не забанен.");
-                }
-            }
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("Игрок зарегистрирован {0}", user.reg_date());
-
-        }
+        
         static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.White;
@@ -189,9 +200,10 @@ namespace GC_API
             while(name!="Y")
             {
             string res = get(type, name);
+            player user = new player(res);
             if (res.IndexOf("message") == -1)
             {
-                output(res);
+                user.player_output(res);
             }
             else
                 Console.WriteLine("Такого игрока не существует.");
