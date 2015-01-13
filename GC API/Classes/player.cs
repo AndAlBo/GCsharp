@@ -131,6 +131,21 @@ namespace GC_API
             string time = Convert.ToString(pDate);
             return time;
         }
+        static int gcyears()
+        {
+            const int tw = 1209600;
+            int i = result.LastIndexOf("reg_date:");
+            string a = "";
+            while (result[i + 10] != '\n')
+            {
+                a = a + result[i + 10];
+                i++;
+            }
+            int Usertime = int.Parse(a);
+            int NowTime = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+            int years = (NowTime - Usertime) / tw;
+            return years;   
+        }
 
         public void player_output()
         {
@@ -150,7 +165,7 @@ namespace GC_API
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("  Игрок активен.");
                 }
-                else
+                  else
                 {
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine("  Игрок неактивен.");
@@ -163,11 +178,11 @@ namespace GC_API
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("Игрок не забанен.");
+                    Console.WriteLine("Игрок не забанен."); 
                 }
             }
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("Игрок зарегистрирован {0}", reg_date());
+            Console.WriteLine("Игрок зарегистрирован {0}. ({1} гк-года)", reg_date(), gcyears());
 
         }
     }

@@ -35,11 +35,15 @@ namespace GC_API
             main_stat stat = new main_stat(res);
             stat.status();  //Статус сервера. 
             //Вот этот цикл обеспечивает ввод данных игроком.
+            ConsoleKeyInfo cki;
             while (true)
             {
                 Console.WriteLine();
-                Console.WriteLine("Чтобы посмотеть список пользовотелей, нажми 1.\nЧтобы посмотеть инофрмацию об игрокуe, нажми 2.\nЧтобы выйти нажми e.\n");
-                string choose = Convert.ToString(Console.ReadLine());
+                Console.WriteLine("Чтобы посмотреть список пользователей, нажми 1.\nЧтобы посмотреть инофрмацию об игрокe, нажми 2.\nЧтобы выйти, нажми 3.\n");
+                cki = Console.ReadKey();
+                string choose = cki.Key.ToString();
+                choose = Convert.ToString(choose[1]);
+                Console.WriteLine();
                 switch (choose)
                 {
                         //Все онлайн юзеры. Добавить их кол-во
@@ -64,8 +68,11 @@ namespace GC_API
                         else
                             Console.WriteLine("Такого игрока не существует.");
                         break;
+                    default:
+                        Console.WriteLine("Что-то здесь не так. Попробуй ещё раз.");
+                        break;
                 }
-                if (choose == "e")
+                if (choose == "3")
                     break;
             }
         }
